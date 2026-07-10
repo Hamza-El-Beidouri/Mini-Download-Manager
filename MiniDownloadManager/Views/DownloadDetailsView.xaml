@@ -1,0 +1,185 @@
+<UserControl
+    Background="Transparent"
+    d:DesignHeight="320"
+    d:DesignWidth="460"
+    mc:Ignorable="d"
+    x:Class="MiniDownloadManager.Views.DownloadDetailsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MiniDownloadManager.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--  Header row with close button  -->
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                FontSize="16"
+                FontWeight="SemiBold"
+                Foreground="#DCE2F0"
+                Text="Selected Download Details"
+                VerticalAlignment="Center" />
+
+            <Button
+                Click="CloseButton_Click"
+                Content="✕"
+                Cursor="Hand"
+                FontSize="16"
+                Foreground="#8E9AB8"
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                Padding="4"
+                VerticalAlignment="Center"
+                x:Name="CloseDetailsBtn">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="Transparent" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                TextElement.Foreground="{TemplateBinding Foreground}"
+                                VerticalAlignment="Center"
+                                x:Name="contentPresenter" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="#FFFFFF" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Grid>
+
+        <!--  Details Grid  -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--  URL  -->
+            <TextBlock
+                Foreground="#6B7B9C"
+                Grid.Column="0"
+                Grid.Row="0"
+                Margin="0,0,12,10"
+                Text="URL:" />
+            <TextBlock
+                Foreground="#DCE2F0"
+                Grid.Column="1"
+                Grid.Row="0"
+                Margin="0,0,0,10"
+                Text="https://releases.example.com/ubuntu-26.04-desktop.iso"
+                TextTrimming="CharacterEllipsis" />
+
+            <!--  Destination  -->
+            <TextBlock
+                Foreground="#6B7B9C"
+                Grid.Column="0"
+                Grid.Row="1"
+                Margin="0,0,12,10"
+                Text="Destination:" />
+            <TextBlock
+                Foreground="#DCE2F0"
+                Grid.Column="1"
+                Grid.Row="1"
+                Margin="0,0,0,10"
+                Text="C:\Users\Downloads\ubuntu-26.04-desktop.iso"
+                TextTrimming="CharacterEllipsis" />
+
+            <!--  Status with ProgressBar  -->
+            <TextBlock
+                Foreground="#6B7B9C"
+                Grid.Column="0"
+                Grid.Row="2"
+                Margin="0,0,12,10"
+                Text="Status:" />
+            <Grid
+                Grid.Column="1"
+                Grid.Row="2"
+                Margin="0,0,0,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Foreground="#A78BFA" Text="Downloading (45%)" />
+                <ProgressBar
+                    Background="#0D1120"
+                    Foreground="#7B61FF"
+                    Grid.Row="1"
+                    Height="10"
+                    Margin="0,6,0,0"
+                    Maximum="100"
+                    Minimum="0"
+                    Value="45">
+                    <ProgressBar.Style>
+                        <Style TargetType="ProgressBar">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ProgressBar">
+                                        <Grid x:Name="TemplateRoot">
+                                            <!--  Rounded background track  -->
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="5" />
+                                            <!--  Indicator – automatically sized by WPF  -->
+                                            <Border
+                                                Background="{TemplateBinding Foreground}"
+                                                CornerRadius="5"
+                                                HorizontalAlignment="Left"
+                                                x:Name="PART_Indicator" />
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ProgressBar.Style>
+                </ProgressBar>
+            </Grid>
+
+            <!--  Hash  -->
+            <TextBlock
+                Foreground="#6B7B9C"
+                Grid.Column="0"
+                Grid.Row="3"
+                Margin="0,0,12,10"
+                Text="SHA-256:" />
+            <TextBlock
+                Foreground="#DCE2F0"
+                Grid.Column="1"
+                Grid.Row="3"
+                Margin="0,0,0,10"
+                Text="3a9f4e7b2c1d8f0a6e5d4c3b2a1908f7e6d5c4b3a2"
+                TextTrimming="CharacterEllipsis" />
+
+            <!--  Date Added  -->
+            <TextBlock
+                Foreground="#6B7B9C"
+                Grid.Column="0"
+                Grid.Row="4"
+                Margin="0,0,12,0"
+                Text="Date Added:" />
+            <TextBlock
+                Foreground="#DCE2F0"
+                Grid.Column="1"
+                Grid.Row="4"
+                Text="2026-07-10 13:00" />
+        </Grid>
+    </Grid>
+</UserControl>

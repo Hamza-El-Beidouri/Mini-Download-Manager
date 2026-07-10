@@ -1,0 +1,214 @@
+<UserControl
+    Background="Transparent"
+    d:DesignHeight="280"
+    d:DesignWidth="550"
+    mc:Ignorable="d"
+    x:Class="MiniDownloadManager.Views.NewDownloadView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MiniDownloadManager.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Download URL label  -->
+        <TextBlock
+            FontSize="12"
+            FontWeight="SemiBold"
+            Foreground="#8E9AB8"
+            Grid.Row="0"
+            Margin="0,0,0,6"
+            Text="Download URL" />
+
+        <!--  URL input with placeholder  -->
+        <Grid Grid.Row="1" Margin="0,0,0,16">
+            <Border
+                Background="#13182B"
+                BorderBrush="#29304A"
+                BorderThickness="1"
+                CornerRadius="6"
+                Padding="4,2">
+                <TextBox
+                    Background="Transparent"
+                    BorderThickness="0"
+                    CaretBrush="#7B61FF"
+                    Foreground="#DCE2F0"
+                    Padding="8,6"
+                    VerticalContentAlignment="Center"
+                    x:Name="UrlInput" />
+            </Border>
+            <TextBlock
+                FontSize="12"
+                Foreground="#6B7B9C"
+                IsHitTestVisible="False"
+                Margin="14,0,0,0"
+                Text="Paste your download URL link here..."
+                VerticalAlignment="Center">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=UrlInput, Path=Text}" Value="">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+
+        <!--  Save directory label  -->
+        <TextBlock
+            FontSize="12"
+            FontWeight="SemiBold"
+            Foreground="#8E9AB8"
+            Grid.Row="2"
+            Margin="0,0,0,6"
+            Text="Save to" />
+
+        <!--  Save directory input + browse button  -->
+        <Grid Grid.Row="3" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Border
+                    Background="#13182B"
+                    BorderBrush="#29304A"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="4,2">
+                    <TextBox
+                        Background="Transparent"
+                        BorderThickness="0"
+                        CaretBrush="#7B61FF"
+                        Foreground="#DCE2F0"
+                        Padding="8,6"
+                        VerticalContentAlignment="Center"
+                        x:Name="PathInput" />
+                </Border>
+                <TextBlock
+                    FontSize="12"
+                    Foreground="#6B7B9C"
+                    IsHitTestVisible="False"
+                    Margin="14,0,0,0"
+                    Text="Select path directory..."
+                    VerticalAlignment="Center">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=PathInput, Path=Text}" Value="">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+
+            <Button
+                Content="..."
+                Cursor="Hand"
+                FontSize="14"
+                Grid.Column="1"
+                Margin="8,0,0,0"
+                Padding="10,4"
+                x:Name="BrowsePathBtn">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Background="Transparent"
+                            BorderBrush="#29304A"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                TextElement.Foreground="#A78BFA"
+                                VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Grid>
+
+        <!--  Action buttons  -->
+        <StackPanel
+            Grid.Row="4"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+
+            <!--  Cancel button with hover  -->
+            <Button
+                Click="CancelButton_Click"
+                Content="Cancel"
+                Cursor="Hand"
+                FontSize="12"
+                FontWeight="SemiBold"
+                Foreground="#8E9AB8"
+                Margin="0,0,12,0"
+                Padding="18,8"
+                x:Name="CancelBtn">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Background="Transparent"
+                            BorderBrush="#29304A"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}"
+                            x:Name="cancelBorder">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" TargetName="cancelBorder" Value="#434D6E" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <!--  Download Now button with hover  -->
+            <Button
+                Click="DownloadButton_Click"
+                Content="Download Now"
+                Cursor="Hand"
+                FontSize="12"
+                FontWeight="SemiBold"
+                Foreground="White"
+                Padding="18,8"
+                x:Name="DownloadNowBtn">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Background="#7B61FF"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}"
+                            x:Name="downloadBorder">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" TargetName="downloadBorder" Value="#8D77FF" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+        </StackPanel>
+    </Grid>
+</UserControl>
