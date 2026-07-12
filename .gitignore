@@ -1,1 +1,31 @@
 .idea/
+##   User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+##   Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Re]leases/
+x64/
+x86/
+AMD64/
+arm64/
+bbin/
+bin/
+obj/
+
+##   JetBrains Rider / Resharper settings
+.idea/
+*.sln.DotSettings.user
+
+##   WPF & MSBuild temporary cache files
+*_wpftmp.csproj
+*_wpftmp.AssemblyInfo.cs
+*.baml
+*.g.cs
+*.g.i.cs
