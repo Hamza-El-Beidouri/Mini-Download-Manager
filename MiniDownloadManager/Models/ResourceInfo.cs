@@ -2,16 +2,18 @@ namespace MiniDownloadManager.Models;
 
 public class ResourceInfo
 {
-    public string SuggestedFileName  { get; }
-    public string ContentType { get; }
+    public string? SuggestedFileName  { get; }
+    public string? ContentType { get; }
     public long? Size { get; }
     public bool IsSizeKnown { get; }
-
-    public ResourceInfo(string suggestedFileName, string contentType, bool isSizeKnown, long? size = null)
+    
+    public ResourceInfo(string? suggestedFileName, string? contentType, long? size = null)
     {
         SuggestedFileName = suggestedFileName;
         ContentType = contentType;
-        IsSizeKnown = isSizeKnown;
         Size = size;
+        
+        IsSizeKnown = Size != null;
     }
+    
 }
