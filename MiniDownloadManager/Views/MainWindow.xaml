@@ -271,20 +271,14 @@
         <Grid
             Background="#A0080C17"
             Grid.RowSpan="3"
+            Panel.ZIndex="100"
             Visibility="Collapsed"
             x:Name="NewDownloadOverlay">
 
-            <Border
-                Background="#0D1120"
-                BorderBrush="#29304A"
-                BorderThickness="1"
-                CornerRadius="12"
-                Height="280"
+            <ContentControl
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Width="550">
-                <views:NewDownloadView x:Name="NewDownloadViewControl" />
-            </Border>
+                x:Name="DialogHost" />
         </Grid>
 
     </Grid>

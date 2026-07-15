@@ -1,7 +1,7 @@
 <UserControl
-    Background="Transparent"
-    d:DesignHeight="280"
-    d:DesignWidth="550"
+    Background="#161C31"
+    MinHeight="280"
+    MinWidth="550"
     mc:Ignorable="d"
     x:Class="MiniDownloadManager.Views.NewDownloadView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -12,6 +12,7 @@
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -42,6 +43,7 @@
                     CaretBrush="#7B61FF"
                     Foreground="#DCE2F0"
                     Padding="8,6"
+                    TextChanged="UrlInput_OnTextChanged"
                     VerticalContentAlignment="Center"
                     x:Name="UrlInput" />
             </Border>
@@ -65,17 +67,58 @@
             </TextBlock>
         </Grid>
 
+        <!--  Resource info  -->
+        <Border
+            Background="#13182B"
+            BorderBrush="#29304A"
+            BorderThickness="1"
+            CornerRadius="6"
+            Grid.Row="2"
+            Margin="0,0,0,16"
+            Padding="12"
+            Visibility="Collapsed"
+            x:Name="ResourceInfoPanel">
+
+            <StackPanel>
+
+                <TextBlock
+                    FontWeight="SemiBold"
+                    Foreground="#A78BFA"
+                    Margin="0,0,0,8"
+                    Text="Resource information" />
+
+                <TextBlock
+                    Foreground="#DCE2F0"
+                    Text="Filename: —"
+                    x:Name="FileNameText" />
+
+                <TextBlock
+                    Foreground="#DCE2F0"
+                    Margin="0,4,0,0"
+                    Text="Size: —"
+                    x:Name="FileSizeText" />
+
+                <TextBlock
+                    Foreground="#DCE2F0"
+                    Margin="0,4,0,0"
+                    Text="Type: —"
+                    x:Name="ContentTypeText" />
+
+            </StackPanel>
+
+        </Border>
+
         <!--  Save directory label  -->
         <TextBlock
             FontSize="12"
             FontWeight="SemiBold"
             Foreground="#8E9AB8"
-            Grid.Row="2"
+            Grid.Row="3"
             Margin="0,0,0,6"
             Text="Save to" />
 
         <!--  Save directory input + browse button  -->
-        <Grid Grid.Row="3" Margin="0,0,0,20">
+        <Grid Grid.Row="4" Margin="0,0,0,20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -145,7 +188,7 @@
 
         <!--  Action buttons  -->
         <StackPanel
-            Grid.Row="4"
+            Grid.Row="5"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
 
@@ -189,6 +232,7 @@
                 FontSize="12"
                 FontWeight="SemiBold"
                 Foreground="White"
+                IsEnabled="False"
                 Padding="18,8"
                 x:Name="DownloadNowBtn">
                 <Button.Template>
