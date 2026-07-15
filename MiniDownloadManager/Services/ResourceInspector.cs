@@ -53,7 +53,8 @@ public class ResourceInspector
 
             using HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Head, url);
 
-            using HttpResponseMessage response = await Client.SendAsync(request, cancellationToken);
+            using HttpResponseMessage response = await Client.SendAsync(request, 
+                HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
             if (!response.IsSuccessStatusCode)
             {
