@@ -11,25 +11,16 @@ public partial class MainWindow : Window
     {
         InitializeComponent(); // Will resolve immediately once namespaces match
         
-        // Subscribe to event handler
-        NewDownloadViewControl.CancelRequested += NewDownloadView_CancelRequested;
-        NewDownloadViewControl.DownloadRequested += NewDownloadView_DownloadRequested;
-
+        // Subscribe to event handlers
         DownloadDetailsViewControl.CloseRequested += DownloadDetailsView_CloseRequested;
     }
-    
-    private void NewDownloadView_CancelRequested(object? sender, EventArgs e)
-    {
-        NewDownloadOverlay.Visibility = Visibility.Collapsed;
-    }
+
     
     private void NewDownloadView_DownloadRequested(object? sender, EventArgs e)
     {
-        // TODO:
-        // Validate
-        // Add download
-
-        NewDownloadOverlay.Visibility = Visibility.Collapsed;
+        var dialog = new NewDownloadView();
+        DialogHost.Content = dialog;
+        NewDownloadOverlay.Visibility = Visibility.Visible;
     }
     
     private void DownloadDetailsView_CloseRequested(object? sender, EventArgs e)
