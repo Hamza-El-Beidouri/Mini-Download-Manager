@@ -16,47 +16,7 @@
 
     <Window.Resources>
         <!--  Embedded mock data for preview  -->
-        <XmlDataProvider XPath="/Downloads/Download" x:Key="MockDownloads">
-            <x:XData>
-                <Downloads xmlns="">
-                    <Download
-                        Actions="Pause"
-                        Name="ubuntu-26.04-desktop.iso"
-                        Progress="45%"
-                        Size="2.4 GB"
-                        Speed="12.5 MB/s"
-                        Status="Downloading" />
-                    <Download
-                        Actions="Resume"
-                        Name="Project_Backup.zip"
-                        Progress="80%"
-                        Size="450 MB"
-                        Speed="0 MB/s"
-                        Status="Paused" />
-                    <Download
-                        Actions="Open"
-                        Name="VSCodeUserSetup.exe"
-                        Progress="100%"
-                        Size="95 MB"
-                        Speed="Finished"
-                        Status="Completed" />
-                    <Download
-                        Actions="Start"
-                        Name="Game_Installer.dmg"
-                        Progress="0%"
-                        Size="42 GB"
-                        Speed="Waiting"
-                        Status="Queued" />
-                    <Download
-                        Actions="Pause"
-                        Name="Design_Draft.psd"
-                        Progress="30%"
-                        Size="1.1 GB"
-                        Speed="5.2 MB/s"
-                        Status="Downloading" />
-                </Downloads>
-            </x:XData>
-        </XmlDataProvider>
+        
 
         <!--  Override DataGridCell to kill default blue selection + focus borders  -->
         <Style TargetType="DataGridCell">
@@ -125,7 +85,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Button
-                    Click="NewDownloadView_DownloadRequested"
+                    Click="AddDownloadButton_Click"
                     Content="+ Add Download"
                     Cursor="Hand"
                     FontSize="12"
@@ -198,7 +158,7 @@
             HeadersVisibility="Column"
             HorizontalGridLinesBrush="#29304A"
             IsReadOnly="True"
-            ItemsSource="{Binding Source={StaticResource MockDownloads}, XPath=/Downloads/Download}"
+            x:Name="DownloadsGrid"
             Margin="0,8,0,0"
             RowBackground="#13182B"
             RowHeight="38"
@@ -229,31 +189,64 @@
 
             <DataGrid.Columns>
                 <DataGridTextColumn
-                    Binding="{Binding XPath=@Name}"
+                    Binding="{Binding FileName}"
                     Header="Name"
                     Width="*" />
                 <DataGridTextColumn
-                    Binding="{Binding XPath=@Progress}"
+                    Binding="{Binding ProgressPercentage, StringFormat={}{0}%}"
                     Header="Progress"
                     Width="120" />
                 <DataGridTextColumn
-                    Binding="{Binding XPath=@Speed}"
+                    Binding="{Binding Speed}"
                     Header="Speed"
                     Width="100" />
                 <DataGridTextColumn
-                    Binding="{Binding XPath=@Status}"
+                    Binding="{Binding Status}"
                     ElementStyle="{StaticResource StatusTextStyle}"
                     Header="Status"
                     Width="110" />
                 <DataGridTextColumn
-                    Binding="{Binding XPath=@Size}"
+                    Binding="{Binding TotalSize}"
                     Header="Size"
                     Width="90" />
-                <DataGridTextColumn
-                    Binding="{Binding XPath=@Actions}"
-                    ElementStyle="{StaticResource ActionLinkStyle}"
-                    Header="Actions"
-                    Width="100" />
+                <DataGridTemplateColumn Header="Actions" Width="130">
+
+                    <DataGridTemplateColumn.CellTemplate>
+
+                        <DataTemplate>
+
+                            <StackPanel
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+
+                                <Button
+                                    Width="28"
+                                    Height="28"
+                                    Margin="2"
+                                    Content="▶"
+                                    Click="StartButton_Click"/>
+
+                                <Button
+                                    Width="28"
+                                    Height="28"
+                                    Margin="2"
+                                    Content="⏸"
+                                    Click="PauseButton_Click"/>
+
+                                <Button
+                                    Width="28"
+                                    Height="28"
+                                    Margin="2"
+                                    Content="✕"
+                                    Click="CancelButton_Click"/>
+
+                            </StackPanel>
+
+                        </DataTemplate>
+
+                    </DataGridTemplateColumn.CellTemplate>
+
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         <Border
