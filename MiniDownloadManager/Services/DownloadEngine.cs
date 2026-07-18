@@ -40,7 +40,7 @@ public class DownloadEngine
     private void EnsureCorrectFileExtension(DownloadJob downloadJob, ReadOnlySpan<byte> firstChunk)
     {
         // Detect using our optimized resource detector
-        string detectedExt = ResourceDetector.Detect(firstChunk);
+        string detectedExt = ResourceDetector.DetectCorrectExtension(firstChunk);
     
         if (!downloadJob.FileName.EndsWith($".{detectedExt}", StringComparison.OrdinalIgnoreCase))
         {
@@ -84,7 +84,6 @@ public class DownloadEngine
             // --- STEP 4: CONTINUE STANDARD DOWNLOAD STREAM ---
             while ((bytesReceived = await streamSource.ReadAsync(buffer, 0, buffer.Length, token)) > 0)
             {
-                token.ThrowIfCancellationRequested();
 
                 await destinationStream.WriteAsync(buffer, 0, bytesReceived, token);
 
@@ -108,13 +107,17 @@ public class DownloadEngine
 
                 if (currentPercent > previousPercent)
                 {
-                    ProgressChanged?.Invoke(this, new DownloadProgressEventArgs(
-                        currentPercent, 
-                        downloadJob.DownloadedBytes, // Bug 4 Fix: Send total cumulative progress bytes, not chunk bytes
-                        currentSpeed
-                    ));
+                    ProgressChanged?.Invoke(this,
+                        new DownloadProgressEventArgs(
+                            downloadJob.Id,
+                            currentPercent,
+                            downloadJob.DownloadedBytes,
+                            currentSpeed));
                 }
             }
+            
+            downloadJob.Status = DownloadJob.DownloadStatus.Completed;
+            downloadJob.Speed = "Finished";
         }
         catch (OperationCanceledException)
         {
@@ -122,7 +125,7 @@ public class DownloadEngine
         }
         catch (Exception e)
         {
-            Debug.WriteLine($"Download error: {e.Message}");
+            // Log errors later
         }
     }
 }
