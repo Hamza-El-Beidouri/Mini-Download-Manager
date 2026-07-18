@@ -1,4 +1,6 @@
-﻿namespace MiniDownloadManager.Services;
+﻿using System.Text;
+
+namespace MiniDownloadManager.Services;
 
 public static class ResourceDetector
 {
@@ -6,7 +8,7 @@ public static class ResourceDetector
     /// <summary>
     /// Detects the file extension based on the first few bytes (magic numbers) of the file.
     /// </summary>
-    public static string Detect(ReadOnlySpan<byte> data)
+    public static string DetectCorrectExtension(ReadOnlySpan<byte> data)
     {
         if (data.Length < 12) return "bin";
 
