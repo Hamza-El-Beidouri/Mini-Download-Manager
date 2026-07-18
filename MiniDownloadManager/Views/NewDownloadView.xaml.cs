@@ -1,7 +1,8 @@
+using System.IO;
 using System.Windows.Controls;
 using System.Windows;
-using System.Text.RegularExpressions;
 using System.Windows.Threading;
+using Microsoft.Win32;
 using MiniDownloadManager.Models;
 using MiniDownloadManager.Services;
 
@@ -16,6 +17,10 @@ public partial class NewDownloadView : UserControl
     private ResourceInfo? _resourceInfo;
     private ResourceInspector _inspector;
     
+    private string? _selectedFileName;
+    private string? _selectedDestinationPath;
+    
+    public event EventHandler<DownloadJob>? DownloadRequested;
     
     private void ConfigureTimer()
     {
@@ -43,31 +48,36 @@ public partial class NewDownloadView : UserControl
 
     private void DownloadButton_Click(object sender, RoutedEventArgs e)
     {
+        if (_resourceInfo == null)
+            return;
 
-    }
+        if (_selectedDestinationPath == null || _selectedFileName == null)
+            return;
 
-    private static string FormatFileSize(long? bytes)
-    {
-        string[] units = { "B", "KB", "MB", "GB", "TB" };
+        DownloadJob job = new DownloadJob(
+            UrlInput.Text,
+            _selectedFileName,
+            _selectedDestinationPath,
+            _resourceInfo.ContentType ?? "application/octet-stream",
+            _resourceInfo.Size);
 
-        long? size = bytes;
-        int unitIndex = 0;
-
-        while (size >= 1024 && unitIndex < units.Length - 1)
-        {
-            size /= 1024;
-            unitIndex++;
-        }
-
-        return $"{size:0.##} {units[unitIndex]}";
+        DownloadRequested?.Invoke(this, job);
     }
     
     private void DisplayResourceInfo()
     {
         FileNameText.Text = $"Filename: {_resourceInfo?.SuggestedFileName ?? "Unknown"}";
-        FileSizeText.Text = $"Size: {(_resourceInfo.Size.HasValue ? FormatFileSize(_resourceInfo.Size) : "Unknown")}";
+        FileSizeText.Text = $"Size: {(_resourceInfo.Size.HasValue ? Helpers.FormatFileSize(_resourceInfo.Size) : "Unknown")}";
         ContentTypeText.Text = $"ContentType: {_resourceInfo?.ContentType ?? "Unknown"}";
         ResourceInfoPanel.Visibility = Visibility.Visible;
+    }
+    
+    private void UpdateDownloadButtonState()
+    {
+        DownloadNowBtn.IsEnabled =
+            _resourceInfo != null &&
+            !string.IsNullOrWhiteSpace(_selectedDestinationPath) &&
+            !string.IsNullOrWhiteSpace(_selectedFileName);
     }
     
     private async void OnTimedEvent(object? sender, EventArgs e)
@@ -77,7 +87,7 @@ public partial class NewDownloadView : UserControl
         if (_resourceInfo != null)
         {
             DisplayResourceInfo();
-            DownloadNowBtn.IsEnabled = true;
+            UpdateDownloadButtonState();
         }
     }
 
@@ -104,5 +114,29 @@ public partial class NewDownloadView : UserControl
             DownloadNowBtn.IsEnabled = false;
         }
 
+    }
+
+    private void BrowsePathBtn_Click(object sender, RoutedEventArgs e)
+    {
+        
+        SaveFileDialog dialog = new SaveFileDialog
+        {
+            Title = "Choose Download Location",
+            FileName = _resourceInfo?.SuggestedFileName ?? "Download",
+            DefaultExt = _resourceInfo?.FileExtension,
+            AddExtension = true,
+            Filter = $"{(_resourceInfo?.FileExtension ?? "All").ToUpper()} files|*.{_resourceInfo?.FileExtension}|All files|*.*"
+        };
+
+        if (dialog.ShowDialog() == true)
+        {
+            string fullPath = dialog.FileName;
+
+            _selectedDestinationPath = Path.GetDirectoryName(fullPath)!;
+            _selectedFileName = Path.GetFileName(fullPath);
+
+            PathInput.Text = fullPath;
+        }
+        
     }
 }
